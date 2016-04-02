@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StopwatchActivity extends AppCompatActivity {
 
@@ -20,6 +21,13 @@ public class StopwatchActivity extends AppCompatActivity {
 
     public void onClickStart(View view){
         running = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        Toast toast = Toast.makeText(getApplicationContext(), "ПРИЛОЖЕНИЕ ЗАКРЫВАЕТСЯ", Toast.LENGTH_SHORT);
+        toast.show();
+        super.onDestroy();
     }
 
     public void onClickStop(View view){
