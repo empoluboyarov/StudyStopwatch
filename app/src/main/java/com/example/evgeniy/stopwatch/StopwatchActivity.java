@@ -11,11 +11,17 @@ public class StopwatchActivity extends AppCompatActivity {
 
     private int seconds;
     private boolean running;
+    private boolean wasRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stopwatch);
+        if(savedInstanceState != null){
+            seconds = savedInstanceState.getInt("seconds");
+            running = savedInstanceState.getBoolean("running");
+            wasRunning = savedInstanceState.getBoolean("wasRunning");
+        }
         runTimer();
     }
 
@@ -23,12 +29,6 @@ public class StopwatchActivity extends AppCompatActivity {
         running = true;
     }
 
-    @Override
-    protected void onDestroy() {
-        Toast toast = Toast.makeText(getApplicationContext(), "ПРИЛОЖЕНИЕ ЗАКРЫВАЕТСЯ", Toast.LENGTH_SHORT);
-        toast.show();
-        super.onDestroy();
-    }
 
     public void onClickStop(View view){
         running = false;
@@ -55,8 +55,26 @@ public class StopwatchActivity extends AppCompatActivity {
                 handler.postDelayed(this,1000);
             }
         });
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("seconds",seconds);
+        outState.putBoolean("running", running);
+        outState.putBoolean("wasRunning",wasRunning );
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        wasRunning = running;
+        running = false;
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (wasRunning)
+            running = true;
     }
 }
